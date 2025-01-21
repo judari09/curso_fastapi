@@ -79,3 +79,15 @@ async def update_customer(customer_id: int,customer_data:CustomerCreate, session
 @router.get("/customers",response_model=list[Customer],tags=['customers'])
 async def list_customer(session: SessionDep):
     return session.exec(select(Customer)).all()
+
+@router.post("/customers/{customer_id}/plans/{plan_id}")
+async def subscribe_to_plan(customer_id:int, plan_id:int, session: SessionDep):
+    customer_db = session.get(Customer, customer_id)
+    plan_db = session.get(Plan,plan_id)
+    if not customer_db or plan_db:
+        raise HTTPException(status_code=404, detail= "Customer or plan doesn't exist")
+    
+    customer_plan_db = CustomerPlan(plan_id=plan_db.id,customer_id=customer_db.id)
+    session.add(customer_plan_db)
+    session.commit()
+    return customer_plan_db

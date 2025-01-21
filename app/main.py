@@ -6,13 +6,14 @@ from pydantic import ValidationError
 from models import *
 from db import *
 from sqlmodel import *
-from .routers import customers,transactions,invoice
+from .routers import customers,transactions,invoice,plans
     
 app = FastAPI(lifespan=create_all_tables)
 
 app.include_router(customers.router)
 app.include_router(transactions.router)
 app.include_router(invoice.router)
+app.include_router(plans.router)
 
 @app.get("/")
 async def root():
