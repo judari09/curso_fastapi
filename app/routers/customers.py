@@ -90,4 +90,5 @@ async def subscribe_to_plan(customer_id:int, plan_id:int, session: SessionDep):
     customer_plan_db = CustomerPlan(plan_id=plan_db.id,customer_id=customer_db.id)
     session.add(customer_plan_db)
     session.commit()
+    session.refresh(customer_plan_db)
     return customer_plan_db
